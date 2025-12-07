@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>書適圈｜深度交流聯誼讀書會</title>
+    
+    <!-- 引入 Bootstrap 與字體 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <!-- 加入 Google Noto Sans TC 中文字體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    
+    <!-- 引入 Animate.css (用於滾動動畫) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+    <style>
+        /* 全域設定 */
+        html, body {
+            height: 100%;
+            /* 統一全站字體，並強制取消斜體 */
+            font-family: 'Noto Sans TC', 'Montserrat', sans-serif;
+            font-style: normal !important; 
+        }
+        
+        /* 導覽列 */
+        .navbar-brand {
+            color: #fed136 !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        .fixed-top {
+            transition: 0.3s all ease;
+            padding: 20px 0;
+        }
+        .change-fixed-top {
+            background: #212529;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        a.nav-link {
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: #fff !important;
+            font-size: 0.95rem;
+        }
+        a.nav-link:hover {
+            color: #fed136 !important;
+        }
+        /* 手機版選單按鈕樣式調整 */
+        .navbar-toggler {
+            background-color: #fed136;
+            border: none;
+            padding: 5px 10px;
+        }
+        .navbar-toggler i {
+            color: #212529;
+            font-size: 1.2rem;
+        }
+
+        /* 封面區 (Hero Section) */
+        #cover {
+            /* ★請在此更換第一張大合照★ */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.5)), url('images/01.jpg'); 
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        #cover h1 {
+            font-size: 4rem; /* 大標字體放大 */
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-family: 'Noto Sans TC', sans-serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.2;
+        }
+        #cover h2 {
+            font-size: 1.2rem;
+            font-weight: 400; /* 改為標準粗細 */
+            margin-bottom: 30px;
+            font-family: 'Noto Sans TC', sans-serif;
+            line-height: 1.6;
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+
+        /* 文字動畫專用樣式 */
+        .letter {
+            display: inline-block; /* 讓文字可以做變形移動 */
+            opacity: 0;            /* 初始隱藏，由 JS 控制顯示 */
+            transform: translateY(50px); /* 初始位置下移 */
+        }
+        
+        /* 倒數計時器樣式 */
+        #countdown-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0 40px 0;
+            flex-wrap: wrap;
+        }
+        .time-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #fed136;
+            border-radius: 8px;
+            margin: 0 10px 10px 10px;
+            padding: 15px 20px;
+            min-width: 90px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(254, 209, 54, 0.2);
+        }
+        .time-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fed136;
+            line-height: 1;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .time-label {
+            color: #fff;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .cta-text {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        /* 按鈕樣式 */
+        .btn-primary {
+            background-color: #fed136;
+            border-color: #fed136;
+            color: #212529;
+            font-weight: 700;
+            padding: 15px 40px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #e6b800;
+            border-color: #e6b800;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 768px) {
+            #cover h1 {
+                font-size: 2.5rem; /* 手機版標題大小 */
+            }
+            #cover h2 {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+            .time-box {
+                min-width: 70px;
+                padding: 10px;
+                margin: 5px;
+            }
+            .time-number {
+                font-size: 1.8rem;
+            }
+            .time-label {
+                font-size: 0.7rem;
+            }
+            .cta-text {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* 通用區塊標題 */
+        section {
+            padding: 100px 0;
+        }
+        .section-heading {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+        .section-heading h3 {
+            font-size: 40px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        /* 修改：移除斜體，改用 Noto Sans TC */
+        .section-heading p {
+            font-size: 16px;
+            color: #777;
+            font-style: normal; /* 強制正體 */
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 400;
+        }
+
+        /* 核心理念 (Services) */
+        .service-icon-box {
+            text-align: center;
+        }
+        .icon-circle {
+            width: 100px;
+            height: 100px;
+            background: #fed136;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 40px;
+            transition: 0.3s;
+        }
+        .service-icon-box:hover .icon-circle {
+            transform: scale(1.1);
+            background: #212529;
+            color: #fed136;
+        }
+        .service-icon-box h4 {
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .service-icon-box p {
+            color: #777;
+            line-height: 1.6;
+        }
+
+        /* 精彩瞬間 (Portfolio/Images) */
+        /* 背景色設定為白色 */
+        #portfolio {
+            background-color: #fff;
+        }
+        .portfolio-item {
+            margin-bottom: 30px;
+        }
+        .portfolio-link {
+            display: block;
+            position: relative;
+            margin: 0 auto;
+        }
+        .portfolio-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* 初衷與時間軸 (Timeline) */
+        .timeline {
+            position: relative;
+            padding: 0;
+            list-style: none;
+        }
+        .timeline:before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 40px;
+            width: 2px;
+            margin-left: -1.5px;
+            content: "";
+            background-color: #e9ecef;
+        }
+        .timeline > li {
+            position: relative;
+            min-height: 50px;
+            margin-bottom: 50px;
+        }
+        .timeline > li:after, .timeline > li:before {
+            display: table;
+            content: " ";
+        }
+        .timeline > li:after {
+            clear: both;
+        }
+        .timeline-image {
+            position: absolute;
+            z-index: 100;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            margin-left: 0;
+            text-align: center;
+            color: white;
+            border: 7px solid #e9ecef;
+            border-radius: 100%;
+            background-color: #fed136;
+            background-size: cover;
+            background-position: center;
+        }
+        .timeline-panel {
+            position: relative;
+            float: right;
+            width: 100%;
+            padding: 0 20px 0 100px;
+            text-align: left;
+        }
+        .timeline-heading h4 {
+            margin-top: 0;
+            color: inherit;
+            font-weight: 700;
+        }
+        .timeline-body > p {
+            margin-bottom: 0;
+            color: #777;
+            line-height: 1.7;
+        }
+
+        @media (min-width: 768px) {
+            .timeline:before {
+                left: 50%;
+            }
+            .timeline > li {
+                min-height: 100px;
+                margin-bottom: 100px;
+            }
+            .timeline .timeline-image {
+                left: 50%;
+                width: 100px;
+                height: 100px;
+                margin-left: -50px;
+            }
+            .timeline > li > .timeline-panel {
+                float: left;
+                width: 41%;
+                padding: 0 20px 20px 30px;
+                text-align: right;
+            }
+            .timeline > li.timeline-inverted > .timeline-panel {
+                float: right;
+                padding: 0 30px 20px 20px;
+                text-align: left;
+            }
+        }
+
+        /* 招募條件 */
+        /* 背景色設定為淺灰 (使用 bg-light 類別，或直接定義) */
+        #requirements {
+            background-color: #f8f9fa; /* Bootstrap 的淺灰色 */
+        }
+        .team-member {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        .req-circle {
+            width: 180px;
+            height: 180px;
+            background: #212529;
+            color: #fed136;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .req-circle i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .team-member h4 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .team-member p {
+            color: #777;
+            font-size: 0.9rem;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        /* 主辦人區塊 */
+        #organizer {
+            background-color: #fff;
+        }
+        .organizer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 40px;
+            background: #f8f9fa;
+            border-left: 5px solid #fed136;
+            border-radius: 4px;
+        }
+        .organizer-content p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+        .highlight-text {
+            color: #212529;
+            font-weight: 500;
+        }
+
+        /* 聯絡資訊 */
+        #contact {
+            background-color: #212529;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            color: white;
+            text-align: center;
+        }
+        #contact .section-heading h3 {
+            color: white;
+        }
+        #contact .section-heading p {
+            color: #fed136;
+        }
+        .info-box {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .info-box h4 {
+            color: #fed136;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            display: inline-block;
+        }
+        .info-box ul li {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .info-box ul li i {
+            width: 30px;
+            color: #fed136;
+        }
+
+        /* 頁尾 */
+        footer {
+            padding: 25px 0;
+            text-align: center;
+            background: white;
+        }
+        footer span {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body id="page-top">
+
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">書適圈</a>
+            <!-- 手機版選單：只有漢堡 icon -->
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ml-auto">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">初衷故事</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">活動方式</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">精彩瞬間</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#requirements">招募對象</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">立即報名</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#organizer">關於主辦人</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 封面區 -->
+    <header id="cover">
+        <div class="container">
+            <div class="intro-text">
+                <h1 class="wow fadeInDown" data-wow-delay="0.2s">書適圈 聯誼讀書會</h1>
+                <h2 class="wow fadeInUp" data-wow-delay="0.4s">一個專為喜愛閱讀的你所打造的深度交流團體</h2>
+                
+                <!-- 倒數計時器 -->
+                <div id="countdown-container" class="wow zoomIn" data-wow-delay="0.5s">
+                    <div class="time-box">
+                        <span id="days" class="time-number">00</span>
+                        <span class="time-label">天</span>
+                    </div>
+                    <div class="time-box">
+                        <span id="hours" class="time-number">00</span>
+                        <span class="time-label">時</span>
+                    </div>
+                    <div class="time-box">
+                        <span id="minutes" class="time-number">00</span>
+                        <span class="time-label">分</span>
+                    </div>
+                    <div class="time-box">
+                        <span id="seconds" class="time-number">00</span>
+                        <span class="time-label">秒</span>
+                    </div>
+                </div>
+
+                <p class="cta-text wow fadeInUp" data-wow-delay="0.6s">幸福即將截止，你還在等什麼？</p>
+                <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger wow bounceIn" data-wow-delay="0.8s" href="#contact">立即報名</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. 書適圈的初衷 (白色背景) -->
+    <section id="about">
+        <div class="container">
+            <div class="section-heading">
+                <!-- 已加入動態 Class -->
+                <h3 class="kinetic-text">書適圈的初衷</h3>
+                <p>為什麼我們在這裡？</p>
+            </div>
+            <ul class="timeline">
+                <li class="wow fadeInUp">
+                    <div class="timeline-image" style="background-image: url('images/06.jpg');"></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4>想遇見好的人，</h4>
+                            <h4 class="subheading">先去好地方</h4>
+                        </div>
+                        <div class="timeline-body">
+                            <p>比起在交友軟體盲目尋覓，不如讓「環境」替你篩選同頻的人。一本書、一場對談，就能自然聚集成熟、有想法、願意成長的夥伴與緣分。</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-inverted wow fadeInUp">
+                    <div class="timeline-image" style="background-image: url('images/07.jpg');"></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4>就算沒有脫單，</h4>
+                            <h4 class="subheading">也能遇見同頻的夥伴</h4>
+                        </div>
+                        <div class="timeline-body">
+                            <p>書適圈不把「配對」當成目的，而是把遇見好的人當成自然的結果。即使沒有發展成浪漫關係，你仍然有機會認識一群願意閱讀、願意成長的朋友。</p>
+                        </div>
+                    </div>
+                </li>
+                 <li class="wow fadeInUp">
+                    <div class="timeline-image" style="background-image: url('images/08.jpg');"></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4>用一本書，</h4>
+                            <h4 class="subheading">輕輕推你走出舒適圈</h4>
+                        </div>
+                        <div class="timeline-body">
+                            <p>每個人都習慣讀某些類型的書，但「交換書」的形式，讓你有機會接觸截然不同的思想與人生經驗。</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 2. 在書適圈，你可以這樣相遇 (灰色背景) -->
+    <section id="services" class="bg-light">
+        <div class="container">
+            <div class="section-heading">
+                <h3 class="kinetic-text">在書適圈，你可以這樣相遇</h3>
+                <p>閱讀是起點，關係是終點</p>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4 wow fadeInLeft">
+                    <div class="service-icon-box">
+                        <div class="icon-circle">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h4>從一本書，了解一個人</h4>
+                        <p>每月的聚會，主辦人皆會設定選書的主題。當天請你帶一本書前來，並花5分鐘介紹這本書為何吸引你。<br>活動結束前，你將會抽選一位異性交換書籍，回去閱讀後，下個月再帶著換書與一本新書前來交流。一共進行四回合(目前已進行一回合)。 </p>
+                    </div>
+                </div>
+                <div class="col-md-4 wow fadeInUp">
+                    <div class="service-icon-box">
+                        <div class="icon-circle">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <h4>建立有「厚度」的關係</h4>
+                        <p>不追求短暫的相遇，希望透過四次聚會、四本書的交換與沉澱，給彼此足夠的時間深入交流(目前已完成一次聚會、交換一本書籍）。<br>每場讀書會會有破冰小遊戲，以及其他認識彼此的活動（以對談、靜態活動為主，不會有肢體接觸）。</p>
+                    </div>
+                </div>
+                <div class="col-md-4 wow fadeInRight">
+                    <div class="service-icon-box">
+                        <div class="icon-circle">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h4>書外連結，自然發酵</h4>
+                        <p>不只有讀書會，期間主辦人視參加者的興趣或交流熱度，不定期舉辦郊遊、運動、聚餐等交流活動，增加除了讀書會時間外的相處時間。<br>參加者也可以在群組主動發起活動。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 精彩瞬間 (白色背景) -->
+    <section id="portfolio">
+        <div class="container">
+            <div class="section-heading">
+                <h3 class="kinetic-text">精彩瞬間</h3>
+                <p>不用很厲害才能來，來了就會有收穫！</p>
+            </div>
+            <div class="row">
+                <!-- ★請將 src 改為你上傳的真實照片路徑★ -->
+                <div class="col-md-4 col-sm-6 portfolio-item wow zoomIn">
+                    <a class="portfolio-link" href="#">
+                        <img class="img-fluid portfolio-img" src="images/02.jpg" alt="活動照片1">
+                    </a>
+                </div>
+                <div class="col-md-4 col-sm-6 portfolio-item wow zoomIn" data-wow-delay="0.2s">
+                    <a class="portfolio-link" href="#">
+                        <img class="img-fluid portfolio-img" src="images/03.jpg" alt="活動照片2">
+                    </a>
+                </div>
+                <div class="col-md-4 col-sm-6 portfolio-item wow zoomIn" data-wow-delay="0.4s">
+                    <a class="portfolio-link" href="#">
+                        <img class="img-fluid portfolio-img" src="images/04.jpg" alt="活動照片3">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 招募條件 (灰色背景) -->
+    <!-- 4. 招募條件 (灰色背景) -->
+    <section id="requirements">
+        <div class="container">
+            <div class="section-heading">
+                <h3 class="kinetic-text">招募對象</h3>
+                <p>我們在尋找這樣的你</p>
+            </div>
+            
+            <!-- 修改為多欄位佈局，加入 row -->
+            <div class="row justify-content-center">
+                
+               <!-- 第 1 點：年齡與工作 -->
+<div class="col-lg-4 col-md-6 mb-4 wow fadeInUp">
+    <div class="team-member">
+        
+        <!-- 黑色圓圈區塊 -->
+        <div class="req-circle">
+            <i class="fas fa-user-clock"></i>
+            <!-- 圓圈內只放 "條件一" 這種短字，或者可以刪除這行 -->
+            <h5 style="margin:0; font-size: 0.9rem; margin-top:5px;">條件一</h5>
+        </div>
+
+        <!-- ★ 修改處：標題移到圓圈外面，並使用 h3 ★ -->
+        <!-- font-weight-bold 加粗，mt-3 增加上方間距 -->
+        <h3 class="mt-3 font-weight-bold">年齡與工作經驗</h3>
+        
+        <!-- 內文 -->
+        <p class="text-muted">35 歲以下，擁有正職工作經驗。</p>
+    </div>
+</div>
+
+                <!-- 第 2 點：性別與人數 -->
+                <div class="col-lg-4 col-md-6 mb-4 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="team-member">
+                        <div class="req-circle">
+                            <i class="fas fa-venus-mars"></i>
+                            <h5 style="margin:0; font-size: 0.9rem; margin-top:5px;">條件二</h5>
+                        </div>
+                        <h4>性別與人數</h4>
+                        <p class="text-muted">男性 1 位、女性 1 位。<br>(目前已有男性 5 位、女性 5 位)</p>
+                    </div>
+                </div>
+
+                <!-- 第 3 點：學歷與職業 -->
+                <div class="col-lg-4 col-md-6 mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="team-member">
+                        <div class="req-circle">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h5 style="margin:0; font-size: 0.9rem; margin-top:5px;">條件三</h5>
+                        </div>
+                        <h4>學歷與職業</h4>
+                        <p class="text-muted">大專院校以上畢業，擁有正當且穩定的工作（非八大、詐騙、博弈等產業）。</p>
+                    </div>
+                </div>
+
+                <!-- 第 4 點：居住地區 -->
+                <div class="col-lg-4 col-md-6 mb-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="team-member">
+                        <div class="req-circle">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h5 style="margin:0; font-size: 0.9rem; margin-top:5px;">條件四</h5>
+                        </div>
+                        <h4>居住地區</h4>
+                        <p class="text-muted">不限居住地，只要能自行前往當天活動地點（台北市）即可報名。</p>
+                    </div>
+                </div>
+
+                <!-- 第 5 點：情感狀態 -->
+                <div class="col-lg-4 col-md-6 mb-4 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="team-member">
+                        <div class="req-circle">
+                            <i class="fas fa-heart"></i>
+                            <h5 style="margin:0; font-size: 0.9rem; margin-top:5px;">條件五</h5>
+                        </div>
+                        <h4>情感狀態</h4>
+                        <p class="text-muted" style="text-align: justify; text-justify: inter-ideograph;">
+                            單身（未婚、無交往對象），並且未有過婚姻紀錄。真誠地尋求一段穩定、長期的關係。更期待：你已整理好自己的內在狀態，沒有過往情感的牽絆。全然地投入關係，既是尊重他人，也是善待自己。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 第 6 點：個人特質 -->
+                <div class="col-lg-4 col-md-6 mb-4 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="team-member">
+                        <div class="req-circle">
+                            <i class="fas fa-leaf"></i> <!-- 改用葉子圖標代表特質/成長 -->
+                            <h5 style="margin:0; font-size: 0.9rem; margin-top:5px;">條件六</h5>
+                        </div>
+                        <h4>個人特質</h4>
+                        <p class="text-muted" style="text-align: justify; text-justify: inter-ideograph;">
+                            喜愛閱讀、享受思考、具有成長型思維。無不良嗜好，例如酗酒、賭博等，為維護空氣品質，吸菸者也不採納。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- 原本底部的人數統計已整合進第2點，所以這裡可以移除或改為報名呼籲 -->
+            <div class="row justify-content-center mt-2">
+                <div class="col-lg-8 text-center">
+                    <p class="large text-muted font-weight-bold">符合以上條件嗎？期待在書適圈遇見你。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 活動資訊與聯絡 -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-heading">
+                <h3 class="kinetic-text">活動資訊與報名</h3>
+                <p>為自己預約一場深度的閱讀之旅</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="info-box wow flipInX">
+                        <h4>書適圈 活動詳情</h4>
+                        <ul>
+                            <li><i class="fas fa-map-marker-alt"></i> <strong>地點：</strong>小樹屋（台北捷運可抵達，活動前一週通知詳細地址）</li>
+                            <li>
+    <i class="fas fa-calendar-alt"></i> <strong>時間：</strong>每月月初舉辦
+    
+    <!-- 新增：排版優化後的場次列表 -->
+    <div style="margin-left: 35px; margin-top: 10px;">
+        
+        <!-- 第一場次：已結束 (設定透明度 0.5 讓它變暗，並加上刪除線) -->
+        <div style="opacity: 0.5; margin-bottom: 6px; font-size: 0.95rem;">
+            <span style="display:inline-block; width: 85px;">第一場次</span>
+            <span>已結束</span>
+        </div>
+
+        <!-- 第二場次：即將到來 (文字設為黃色 #fed136 以強調) -->
+        <div style="margin-bottom: 6px; font-size: 1rem; color: #fff;">
+            <span style="display:inline-block; width: 85px; color: #fed136; font-weight:500;">第二場次</span>
+            <span>01/11 (日) 14:00-17:00</span>
+        </div>
+
+        <!-- 第三場次 -->
+        <div style="margin-bottom: 6px; font-size: 1rem; color: #fff;">
+            <span style="display:inline-block; width: 85px; color: #fed136; font-weight:500;">第三場次</span>
+            <span>02/07 (六) 14:00-17:00</span>
+        </div>
+
+        <!-- 第四場次 -->
+        <div style="margin-bottom: 6px; font-size: 1rem; color: #fff;">
+            <span style="display:inline-block; width: 85px; color: #fed136; font-weight:500;">第四場次</span>
+            <span>03/07 (六) 14:00-17:00</span>
+        </div>
+        
+    </div>
+</li>
+                            
+                            <li><i class="fas fa-dollar-sign"></i> <strong>費用：</strong>200 元 / 單場（僅分攤場地與道具成本）</li>
+                        </ul>
+                        <hr style="border-color: rgba(255,255,255,0.2);">
+                        <p style="font-size: 0.9rem; margin-top: 15px;">*活動為非營利性質，主辦人嚴格審核報名資料。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center wow bounceIn">
+                <div class="col-md-12">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPnzOiq2b8GPe-OU0gCpkEty8et-Qs6jZdPOWWYSbUb6c33g/viewform?usp=send_form" target="_blank" class="btn btn-primary btn-xl">
+                        立即報名
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 關於主辦人 -->
+    <section id="organizer">
+        <div class="container">
+            <div class="section-heading">
+                <!-- 這裡原本有多一個 < 導致錯誤，已修復 -->
+                <h3 class="kinetic-text">關於主辦人</h3>
+                <p>書適圈的起點</p>
+            </div>
+            <div class="row wow fadeInUp">
+                <div class="col-lg-12">
+                    <div class="organizer-content">
+                        <p><span class="highlight-text">Hi，我是 Iris。</span><br>
+                        因為喜愛閱讀，參加過不同類型的讀書會，除了心靈有所收穫外，也認識了穩定的伴侶並結交一群相知相惜的好友。這些美好的體驗，一直是我心中的寶藏。</p>
+                        
+                        <p>今年 10 月，我參加了一場日本瀨戶內海的旅行，結識了一群勇於衝破舒適圈的旅伴。他們的想法觸動了我，讓我反問自己：「閱讀曾帶我跨出一步，看見更廣的世界，那何不再勇敢一次，為和我有同樣渴望的人，創造一個新的可能？」</p>
+                        
+                        <p>既然一切的美好都從書開始，那就讓這個新的圈子，也從「書」出發吧！這就是「書適圈」的由來，一個用「書」本打破「舒適圈」的地方。</p>
+                        
+                        <p>如果這個小小的嘗試，能讓你踏出舒適圈一步，哪怕只是獲得了一點點繼續探索的勇氣，那就太好了。而如果你本來就是一個勇於探索的人，那也請你來到這裡，讓大家看見你的光，你或許將成為啟發另一個人的火花。</p>
+                        
+                        <p style="margin-bottom:0;">我始終相信：閱讀，會吸引內在同樣豐富的靈魂。無論你是哪一種人，都歡迎你帶著最真實的自己前來。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁尾 -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="copyright">Copyright &copy; 書適圈 2026. All Rights Reserved.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    
+    <!-- GSAP 動畫庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // 初始化 WOW 動畫
+        new WOW().init();
+
+        // -------------------------
+        // 1. GSAP 文字特效 (修正後整合版)
+        // -------------------------
+        document.addEventListener("DOMContentLoaded", function() {
+            // 註冊 ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+
+            // 選取所有擁有 "kinetic-text" class 的標題
+            const headings = document.querySelectorAll('.kinetic-text');
+
+            // 對每一個標題進行迴圈處理
+            headings.forEach(heading => {
+                // 拆解文字
+                const text = heading.innerText;
+                heading.innerHTML = text.split('').map(char => {
+                    // 如果是空白，保留寬度
+                    if (char === " ") return `<span class="letter" style="display:inline-block; min-width: 10px;">&nbsp;</span>`;
+                    // 設定初始樣式：下移 50px 且透明
+                    return `<span class="letter" style="display:inline-block; transform:translateY(50px); opacity:0;">${char}</span>`;
+                }).join('');
+
+                // 設定這個標題專屬的 GSAP 動畫
+                gsap.to(heading.querySelectorAll('.letter'), {
+                    scrollTrigger: {
+                        trigger: heading,      // 觸發對象是「目前這個標題」自己
+                        start: "top 85%",      // 當標題頂部進入視窗 85% 處觸發
+                        toggleActions: "play none none reverse" // 往下滑播放，往上滑倒帶
+                    },
+                    y: 0,              // 回到原位
+                    opacity: 1,        // 變清楚
+                    duration: 1,       // 動畫時間
+                    ease: "power4.out",// 動畫曲線
+                    stagger: 0.1       // 每個字間隔 0.1 秒
+                });
+            });
+        });
+
+        // -------------------------
+        // 2. 導覽列與介面互動
+        // -------------------------
+        // 導覽列變色效果
+        $(window).scroll(function() {
+            if ($(document).scrollTop() > 100) {
+                $('.fixed-top').addClass('change-fixed-top');
+            } else {
+                $('.fixed-top').removeClass('change-fixed-top');
+            }
+        });
+
+        // 平滑滾動
+        $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: (target.offset().top - 54)
+                    }, 1000, "easeInOutExpo");
+                    return false;
+                }
+            }
+        });
+
+        // 手機選單自動收合
+        $('.js-scroll-trigger').click(function() {
+            $('.navbar-collapse').collapse('hide');
+        });
+
+        // -------------------------
+        // 3. 倒數計時器邏輯
+        // -------------------------
+        
+        // 修改日期為 2025年12月29日
+        var countDownDate = new Date("Dec 29, 2025 00:00:00").getTime();
+
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // 補零
+            document.getElementById("days").innerHTML = (days < 10 ? "0" : "") + days;
+            document.getElementById("hours").innerHTML = (hours < 10 ? "0" : "") + hours;
+            document.getElementById("minutes").innerHTML = (minutes < 10 ? "0" : "") + minutes;
+            document.getElementById("seconds").innerHTML = (seconds < 10 ? "0" : "") + seconds;
+
+            // 倒數結束時的動作
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countdown-container").innerHTML = "<div class='time-box' style='width:100%'><span class='time-number'>已截止</span></div>";
+                document.querySelector(".cta-text").innerHTML = "報名已結束，期待下次相遇！";
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>
